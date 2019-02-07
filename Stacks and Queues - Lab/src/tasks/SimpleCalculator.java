@@ -1,7 +1,10 @@
+package tasks;
+
 import java.util.*;
 
 public class SimpleCalculator {
 
+	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
 		String[] tokens = scanner.nextLine().split("\\s+");
