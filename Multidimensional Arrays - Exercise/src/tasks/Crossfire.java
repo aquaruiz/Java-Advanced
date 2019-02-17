@@ -1,15 +1,13 @@
 package tasks;
 
-import java.awt.geom.GeneralPath;
-import java.nio.channels.Pipe.SourceChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 
 public class Crossfire {
 
 	public static void main(String[] args) {
+		@SuppressWarnings("resource")
 		Scanner scanner = new Scanner(System.in);
 		String[] input = scanner.nextLine().split(" ");
 		int rows = Integer.parseInt(input[0]);
@@ -26,48 +24,62 @@ public class Crossfire {
 		}
 		
 		String line = scanner.nextLine();
-		
-		while(!line.equals("Nuke it from orbit")) {
-			int[] tokens = Arrays.stream(line.split(" "))
-					.mapToInt(Integer::parseInt).toArray();
-			int targetRow = tokens[0];
-			int targetCol = tokens[1];
-			int range = tokens[2];
-			
-			int horizontalStartPoint = Math.max(0, targetCol - range);
-			int verticalStartPoint = Math.max(0, targetRow - range);
-			int horizontalEndPoint = Math.min(cols, targetCol + range+1);
-			int verticalEndPoint = Math.min(rows, targetRow + range+1);
 
-			for (int i = verticalStartPoint; i <= verticalEndPoint; i++) {
-				if (i < rows) {
-					if (i == targetRow) {
-						for (int j = horizontalStartPoint; j <= horizontalEndPoint; j++) {
-							if (j <= matrix.get(i).size()) {
-								matrix.get(i).remove(horizontalStartPoint);
-							}
+		while (!line.equals("Nuke it from orbit")) {
+			int[] tokens = Arrays.stream(line.split(" "))
+					.mapToInt(Integer::parseInt)
+					.toArray();
+			int bombRow = tokens[0];
+			int bombCol = tokens[1];
+			int bombRange = tokens[2];
+			
+			int detonationStartCol = Math.max(bombCol - bombRange, 0);
+			int detonationStartRow = Math.max(bombRow - bombRange, 0);
+			int detonationEndCol = Math.min(bombCol + bombRange, cols - 1);
+			int detonationEndRow = Math.min(bombRow + bombRange, rows - 1);
+			
+			for (int i = detonationStartRow; i <= detonationEndRow; i++) {
+				for (int j = detonationStartCol; j <= detonationEndCol; j++) {
+					if (j == bombCol) {
+						try {
+							matrix.get(i).set(j, -1);
+						} catch (Exception e) {
+							// TODO: handle exception
 						}
-//						for (int f : matrix.get(i)) {
-//							System.out.print(f + " ");
-//						}
-//						System.out.println();
-//						System.out.println(i);
-//						System.out.println(horizontalStartPoint);
-						matrix.get(i).remove(horizontalStartPoint);
-					} else {
-						if (targetCol < matrix.get(i).size()) {
-							matrix.get(i).remove(targetCol);
+					} else if (i == bombRow) {
+						try { 
+							matrix.get(i).set(j, -1);
+						} catch (Exception e) {
+							// TODO: handle exception
 						}
 					}
 				}
 			}
 			
+			for (int i = 0; i < matrix.size(); i++) {
+				for (int j = 0; j < matrix.get(i).size(); j++) {
+					if (matrix.get(i).get(j) == -1) {
+						matrix.get(i).remove(j);
+						j--;
+					}
+				}
+			}
+			
+			for (int i = 0; i < matrix.size(); i++) {
+				if (matrix.get(i).size() == 0) {
+					matrix.remove(i);
+				}
+			}
+
 			line = scanner.nextLine();
 		}
 		
-		for (ArrayList<Integer> arrayLists : matrix) {
-			for (Integer in : arrayLists) {
-				System.out.print(in + " ");
+
+		for (int i = 0; i < matrix.size(); i++) {
+			for (int j = 0; j < matrix.get(i).size(); j++) {
+				if (matrix.get(i).get(j) != -1) {
+					System.out.print(matrix.get(i).get(j) + " ");
+				}
 			}
 			
 			System.out.println();
