@@ -59,9 +59,11 @@ public class srpskoUnleashed {
 					srbsko.get(currentPlace).put(currentSinger, income);
 				} catch (Exception e) {
 					inputLine = scanner.nextLine();
+					continue;
 				}
 			} catch (Exception e) {
 				inputLine = scanner.nextLine();
+				continue;
 			}
 
 			inputLine = scanner.nextLine();

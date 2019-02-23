@@ -1,5 +1,6 @@
 package tasks;
 
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -51,24 +52,29 @@ public class DragonArmy {
 			dic.get(type).get(name).set(2, armor);
 		}
 
-		for (String dragon : dic.keySet()) {
-			System.out.println(dragon);
+		for (String typ : dic.keySet()) {
+			double[] totalStats = new double[3];
 
-			// TODO print!
-//            double averageDamage = dragonData.Value.Select(x => x.Value[0]).Average();
-//            double averageHealths = dragonData.Value.Select(x => x.Value[1]).Average();
-//            double averageArmor = dragonData.Value.Select(x => x.Value[2]).Average();
-//
-//            Console.WriteLine($"{dragonData.Key}::({averageDamage:f2}/{averageHealths:f2}/{averageArmor:f2})");
-//            foreach (var currentDragon in dragonData.Value)
-//            {
-//                Console.WriteLine("-{0} -> damage: {1}, health: {2}, armor: {3}",
-//                    currentDragon.Key,
-//                    currentDragon.Value[0],
-//                    currentDragon.Value[1],
-//                    currentDragon.Value[2]
-//                );
-//            }
+			for (String dragon : dic.get(typ).keySet()) {
+				totalStats[0] += dic.get(typ).get(dragon).get(0);
+				totalStats[1] += dic.get(typ).get(dragon).get(1);
+				totalStats[2] += dic.get(typ).get(dragon).get(2);
+			}
+
+			for (int i = 0; i < totalStats.length; i++) {
+				totalStats[i] /= dic.get(typ).size();
+			}
+
+			DecimalFormat dec = new DecimalFormat("0.00");
+
+			System.out.println(typ + "::(" + dec.format(totalStats[0]) + "/" + dec.format(totalStats[1]) + "/"
+					+ dec.format(totalStats[2]) + ")");
+
+			for (String dragon : dic.get(typ).keySet()) {
+				System.out.printf("-%s -> damage: %.0f, health: %.0f, armor: %.0f%n", dragon,
+						dic.get(typ).get(dragon).get(0), dic.get(typ).get(dragon).get(1),
+						dic.get(typ).get(dragon).get(2));
+			}
 		}
 	}
 }
