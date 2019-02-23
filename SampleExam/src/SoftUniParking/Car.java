@@ -1,4 +1,4 @@
-package softUniParking;
+package SoftUniParking;
 
 public class Car {
 	String make;

@@ -1,4 +1,4 @@
-package softUniParking;
+package SoftUniParking;
 
 import java.util.ArrayList;
 import java.util.List;
