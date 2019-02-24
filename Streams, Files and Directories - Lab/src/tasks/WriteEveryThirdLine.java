@@ -27,8 +27,8 @@ public class WriteEveryThirdLine {
 
 			while (nextLine != null) {
 				if (counter % 3 == 0) {
-					System.out.println(nextLine);
-					writer.write(nextLine);
+					System.out.print(nextLine + "\n");
+					writer.write(nextLine + "\n");
 				}
 
 				counter++;

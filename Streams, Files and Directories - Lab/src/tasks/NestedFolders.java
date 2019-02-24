@@ -1,34 +1,33 @@
 package tasks;
 
 import java.io.File;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class NestedFolders {
 
 	public static void main(String[] args) {
-		File dir = new File("NestedFolders/Files-and-Streams/");
+		File root = new File("NestedFolders/Files-and-Streams/");
 
-		File[] files = dir.listFiles();
+		Deque<File> dirs = new ArrayDeque<>();
+		dirs.offer(root);
 
-		int counter = 0;
-		for (File file : files) {
-			if (file.isDirectory()) {
-				counter = printDir(file, counter);
+		int count = 1;
+
+		while (!dirs.isEmpty()) {
+			File current = dirs.poll();
+			File[] nestedFiles = current.listFiles();
+
+			for (File nestedFile : nestedFiles) {
+				if (nestedFile.isDirectory()) {
+					dirs.offer(nestedFile);
+					count++;
+				}
 			}
+
+			System.out.println(current.getName());
 		}
 
-		System.out.println(counter + " folders");
-	}
-
-	public static int printDir(File dir, int counter) {
-		File[] files = dir.listFiles();
-
-		for (File file : files) {
-			if (file.isDirectory()) {
-				System.out.println(file.getName());
-				printDir(file, counter++);
-			}
-		}
-
-		return counter;
+		System.out.println(count + " folders");
 	}
 }
